@@ -1,7 +1,7 @@
 name: dnb
-description: A new Flutter package project.
+description: A Dart client library for interacting with DNB's open APIs.
 version: 0.0.1
-author:
+author: Arne Molland <arnolaim@gmail.com>
 homepage:
 
 environment:
