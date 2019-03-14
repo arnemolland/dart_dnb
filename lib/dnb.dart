@@ -630,15 +630,3 @@ enum PaymentType {
 
 /// PaymentStatus enums as vaguely described in the DNB docs.
 enum PaymentStatus { deactivate, activate }
-
-void main() async {
-  DNB dnb = DNB(
-      clientKey: 'AKIAIZTLYJ6AZSZR7WVQ',
-      clientSecret: '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',
-      apiKey: '251b688db1294f8583df9feee638af09');
-
-  await dnb.getToken(idType: 'SSN', customerId: '29105573083');
-  print(await dnb.getTransactions(
-    account: '12003189487'
-  ));
-}
