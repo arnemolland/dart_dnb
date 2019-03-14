@@ -1,6 +1,6 @@
 ## 1.0.1
 
-* Fixed typos
+* Added example
 
 ## 1.0.0
 
