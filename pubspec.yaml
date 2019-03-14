@@ -11,6 +11,9 @@ dependencies:
 
   meta: ^1.1.6
   http: ^0.12.0
-
   sigv4:
     git: https://github.com/arnemolland/sigv4.git
+
+dev_dependencies:
+  test: ^1.5.3
+  dotenv: ^1.0.0
