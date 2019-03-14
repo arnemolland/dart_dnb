@@ -270,12 +270,10 @@ packages:
   sigv4:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "07916b21f17ec84f39cbf3900d2d4f47aa48bede"
-      url: "https://github.com/arnemolland/sigv4.git"
-    source: git
-    version: "0.0.1"
+      name: sigv4
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   source_map_stack_trace:
     dependency: transitive
     description:
