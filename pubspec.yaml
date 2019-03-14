@@ -2,7 +2,7 @@ name: dnb
 description: A Dart client library for interacting with DNB's open APIs.
 version: 1.0.0
 author: Arne Molland <arnolaim@gmail.com>
-homepage: https://github.com/arnemolland/dnb-dart
+homepage: https://github.com/arnemolland/dart-dnb
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
