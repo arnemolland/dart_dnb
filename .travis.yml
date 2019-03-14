@@ -1,19 +1,7 @@
 language: dart
-
-jobs:
-  include:
-    - stage: unit_test
-      env: All unit tests
-      dart_task:
-      - test
-
-stages:
-  - unit_test
-
-branches:
-  only:
-    - master
-
+script:
+  - pub get
+  - pub run test
 cache:
   directories:
     - $HOME/.pub-cache
