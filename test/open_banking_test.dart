@@ -1,14 +1,8 @@
 import 'package:dnb/dnb.dart';
 import 'package:test/test.dart';
-import 'package:dotenv/dotenv.dart' show load, env;
-
-// TODO Implement block/inblock testing once DNB has fixed their test custoemrs
-// TODO Implement payment tests
-// TODO Use then instead of await
+import 'package:dotenv/dotenv.dart' show env;
 
 void main() {
-  load();
-
   final openBankingClient = OpenBankingClient(
     apiKey: env['API_KEY'],
     clientId: env['CLIENT_ID'],
