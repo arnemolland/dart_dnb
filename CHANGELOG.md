@@ -16,8 +16,6 @@ Other changes:
 - Updated dependencies
 - Code cleanup and formatting
 
-
-
 ## 1.0.1
 
 * Added example
