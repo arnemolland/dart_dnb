@@ -1,4 +1,8 @@
 
+# 1.1.2
+
+Updated README to reflect the recent changes in the library.
+
 # 1.1.1
 
 Actually forgot to bump package version. Because of serious OCD, the pub version and pubspec version *has* to be in sync.
@@ -11,7 +15,7 @@ DNB recently updated their APIs, resulting in various changes
 
 * Removed all Open Banking APIs no longer supported by DNB
 * Removed optional JWT token for all methods, as it's only a duplicate of the `jwt` field anyway.
-* Separated their Open Banking APIs into its own client to separate from their PSD2 APIs, which is coming to this library in the next release
+* Separated their Open Banking APIs into its own client to separate from their PSD2 APIs, which is coming to this library in the next minor version
 * Changed parameters for Currency APIs
 
 Other changes:

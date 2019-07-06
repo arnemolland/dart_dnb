@@ -30,45 +30,31 @@
   </a>
 </p>
 
-The APIs are currently under development, and only available in a sandbox. To use this API, you have to create an application at [https://developer.dnb.no](https://developer.dnb.no).
+The APIs are currently under development and may change. To use this API, you have to create an application at [https://developer.dnb.no](https://developer.dnb.no).
 
 See examples below.
 
 ## Usage
 
 ```dart
-import 'package:dnb/dnb.dart';
+import 'package:dnb/dnb.dart' as dnb;
 
 void main() async {
-  final dnb = DNB(
+  final client = dnb.OpenBankingClient(
       clientKey: 'YOUR-CLIENT-KEY',
       clientSecret: 'YOUR-CLIENT-SECRET',
-      apiKey: 'YOUR-API-KEY');
+      apiKey: 'YOUR-API-KEY',
+  );
 
   /// Retrieve all test customers from sandbox
-  final testCustomers = await dnb.getTestCustomers();
+  final testCustomers = await client.getTestCustomers();
 
   /// Retrieve token for access to other APIs
-  final token = await dnb.getToken(customerId: 'CUSTOMER-ID');
+  final token = await client.getToken(customerId: 'CUSTOMER-ID');
 
-  /// Retrieve the current customer using the token
-  final customer = await dnb.getCurrentCustomer(jwt: token);
+  /// Retrieve the current customer
+  final customer = await client.getCurrentCustomer();
 }
-```
-
-## Features
-
-The DNB class contains helper methods for creating payment bodies.
-
-```dart
-final payment = dnb.createPaymentBody(
-  creditAccount: '12345678901',
-  debitAccount: '10987654321',
-  amount: 500,
-  executionDate: DateTime.now(),
-);
-
-await dnb.initiatePayment(payment: payment);
 ```
 
 ## Development
@@ -79,7 +65,7 @@ Do `pub get`.
 
 Run tests with `pub run test`.
 
-Do not commit directly to master. Preferably, make a branch or fork out of the `development` branch and make a pull request.
+Do not commit directly to master. Preferably, make a feature/branchname branch and create a pull request.
 
 ## License
 
