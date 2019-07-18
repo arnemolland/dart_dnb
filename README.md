@@ -65,7 +65,7 @@ Do `pub get`.
 
 Run tests with `pub run test`.
 
-Do not commit directly to master. Preferably, make a feature/branchname branch and create a pull request.
+PRs are appreciated.
 
 ## License
 
