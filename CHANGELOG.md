@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0+1
+
+- Formatting, updated readme
+
 ## 1.2.0
 
 ### **BREAKING CHANGES:**
