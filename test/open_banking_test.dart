@@ -1,15 +1,14 @@
+import 'dart:io';
+
 import 'package:dnb/dnb.dart';
 import 'package:test/test.dart';
-import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() {
-  load();
-
   group('#realData', () {
     final openBankingClient = OpenBankingClient(
-      apiKey: env['API_KEY'],
-      clientId: env['CLIENT_ID'],
-      clientSecret: env['CLIENT_SECRET'],
+      apiKey: Platform.environment['API_KEY'],
+      clientId: Platform.environment['CLIENT_ID'],
+      clientSecret: Platform.environment['CLIENT_SECRET'],
     );
 
     const customerId = '29105573083';
@@ -17,17 +16,13 @@ void main() {
     const creditCardId = 'QLDW22575585E90E';
     const expectedCreditCardBalance = -23805.0;
 
-    test(
-        'getToken() retrieves token',
-        () => openBankingClient
-            .getToken(customerId)
-            .then((jwt) => expect(jwt != null, true)));
+    test('getToken() retrieves token',
+        () => openBankingClient.getToken(customerId).then((jwt) => expect(jwt != null, true)));
 
     test(
         'getCards() retrieves cards',
-        () => openBankingClient
-            .getCards()
-            .then((cards) => expect(cards[0]['cardId'], debitCardId)));
+        () =>
+            openBankingClient.getCards().then((cards) => expect(cards[0]['cardId'], debitCardId)));
 
     test(
       'getCard() retrieves specified card',
@@ -38,8 +33,9 @@ void main() {
 
     test(
       'getCardBalance() retrieves the balance of specified credit card',
-      () => openBankingClient.getCardBalance(creditCardId).then(
-          (balance) => expect(balance['balance'], expectedCreditCardBalance)),
+      () => openBankingClient
+          .getCardBalance(creditCardId)
+          .then((balance) => expect(balance['balance'], expectedCreditCardBalance)),
     );
 
     test(
