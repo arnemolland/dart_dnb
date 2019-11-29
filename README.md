@@ -6,8 +6,6 @@
 </h1>
 
 <h4 align="center">A Dart client for DNB's API products. (Under development, may change)</h4>
-
-
 <p align="center">
   <a href="https://travis-ci.org/arnemolland/dart-dnb">
     <img alt="Travis Build Status" src="https://img.shields.io/travis/arnemolland/dart-dnb.svg?style=flat-square">
@@ -50,7 +48,7 @@ void main() async {
   final testCustomers = await client.getTestCustomers();
 
   /// Retrieve token for access to other APIs
-  final token = await client.getToken(customerId: 'CUSTOMER-ID');
+  final token = await client.getToken('CUSTOMER-ID');
 
   /// Retrieve the current customer
   final customer = await client.getCurrentCustomer();
