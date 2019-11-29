@@ -22,39 +22,39 @@ class OpenBankingClient {
     @required this.clientSecret,
     @required this.apiKey,
     this.endpoint = 'https://developer-api-testmode.dnb.no',
-  }) : client = Sigv4Client(clientId, clientSecret, endpoint);
+  }) : client = Sigv4Client(
+          accessKey: clientId,
+          secretKey: clientSecret,
+        );
 
   /// Sets the JWT token [jwt] representing the end-customer, and is stored internally. You need this token
   /// for calling the [Customer], [Accounts], [Transactions], [Cards] and [Payments]
   /// APIs. The token has an expiry time of ten minutes.
-  Future<dynamic> getToken({
-    @required String customerId,
+  Future<dynamic> getToken(
+    String customerId, {
     String idType = 'ssn',
     int version = 0,
   }) async {
-    final request = Sigv4Request(
-      client,
+    final request = client.request(
+      '$endpoint/tokens/v$version',
       method: 'POST',
-      path: '/tokens/v$version',
       headers: {'x-api-key': apiKey},
       body: {idType: customerId},
     );
 
     // Workaround issue where the Content-Type header caused errors, and is not needed
-    request.headers.remove('Content-Type');
-    return await post(request.url, headers: request.headers, body: request.body)
-        .then((response) {
+    //request.headers.remove('Content-Type');
+    return await post(request.url, headers: request.headers, body: request.body).then((response) {
       if (response.statusCode >= 200 && response.statusCode <= 300) {
         try {
           this.jwt = json.decode(response.body)['jwtToken'];
           return jwt;
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
         throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+            'HTTP${response.statusCode}: ${response.reasonPhrase}, ${response.body}');
       }
     });
   }
@@ -66,74 +66,58 @@ class OpenBankingClient {
   }) async {
     return await get(
       '$endpoint/cards/v$version',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json'
-      },
+      headers: {'x-api-key': apiKey, 'x-dnbapi-jwt': jwt, 'accept': 'application/json'},
     ).then((response) {
       if (response.statusCode >= 200 && response.statusCode <= 300) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
 
   /// Takes a card's [id] and returns the card details.
-  Future<dynamic> getCard({
-    @required String id,
+  Future<dynamic> getCard(
+    String id, {
     int version = 0,
   }) async {
-    return await get('$endpoint/cards/v$version/$id', headers: {
-      'x-api-key': apiKey,
-      'x-dnbapi-jwt': jwt,
-      'accept': 'application/json'
-    }).then((response) {
+    return await get('$endpoint/cards/v$version/$id',
+            headers: {'x-api-key': apiKey, 'x-dnbapi-jwt': jwt, 'accept': 'application/json'})
+        .then((response) {
       if (response.statusCode >= 200 && response.statusCode <= 300) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
 
-  /// Takes a credit card's [id] and returns the balance of given card.
-  /// Does not work with debit cards.
-  Future<dynamic> getCardBalance({
-    @required String id,
+  /// Takes a credit card's [id] and returns the balance of given credit card.
+  /// For debit cards, use `getAccountBalance`.
+  Future<dynamic> getCardBalance(
+    String id, {
     int version = 0,
   }) {
     return get(
       '$endpoint/cards/v$version/$id/balance',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json'
-      },
+      headers: {'x-api-key': apiKey, 'x-dnbapi-jwt': jwt, 'accept': 'application/json'},
     ).then((response) {
       if (response.statusCode >= 200 && response.statusCode <= 300) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
@@ -141,8 +125,8 @@ class OpenBankingClient {
   /// Takes a card's [id] and applies a soft-block (not including Cresco Cards).
   /// This operation is only allowed where `cardStatus` is `Active` and
   /// `blockAllowed` is `true`.
-  Future<dynamic> blockCard({
-    @required String id,
+  Future<dynamic> blockCard(
+    String id, {
     int version = 0,
   }) async {
     return await put(
@@ -157,20 +141,18 @@ class OpenBankingClient {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
 
   /// Unblocks the debit card provided by [id] from a "soft block",
   /// where `cardStatus` is `Blocked` and `unblockAllowed` is `true`.
-  Future<dynamic> unblockCard({
-    @required String id,
+  Future<dynamic> unblockCard(
+    String id, {
     int version = 0,
   }) async {
     return await put(
@@ -185,20 +167,18 @@ class OpenBankingClient {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
 
   /// Returns a list of currency rates for the most common currencies, for
   /// the specified ISO-4217 string [quoteCurrency].
-  Future<dynamic> getCurrencyRateList({
-    @required String quoteCurrency,
+  Future<dynamic> getCurrencyRateList(
+    String quoteCurrency, {
     int version = 1,
   }) {
     return get(
@@ -212,12 +192,10 @@ class OpenBankingClient {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
@@ -239,12 +217,10 @@ class OpenBankingClient {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
@@ -265,12 +241,10 @@ class OpenBankingClient {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
@@ -280,19 +254,18 @@ class OpenBankingClient {
   Future<dynamic> getTestCustomers({
     int version = 0,
   }) {
-    return get('$endpoint/test-customers/v$version',
-            headers: {'x-api-key': apiKey, 'accept': 'application/json'})
-        .then((response) {
+    return get('$endpoint/test-customers/v$version', headers: {
+      'x-api-key': apiKey,
+      'accept': 'application/json',
+    }).then((response) {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
+          throw FormatException('Failed to parse response body.\n${e.toString()}');
         }
       } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw HttpException('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }

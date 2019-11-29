@@ -1,65 +1,70 @@
 import 'package:dnb/dnb.dart';
 import 'package:test/test.dart';
-import 'package:dotenv/dotenv.dart' show env;
+import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() {
-  final openBankingClient = OpenBankingClient(
-    apiKey: env['API_KEY'],
-    clientId: env['CLIENT_ID'],
-    clientSecret: env['CLIENT_SECRET'],
-  );
+  load();
 
-  test(
-      'getToken() retrieves token',
+  group('#realData', () {
+    final openBankingClient = OpenBankingClient(
+      apiKey: env['API_KEY'],
+      clientId: env['CLIENT_ID'],
+      clientSecret: env['CLIENT_SECRET'],
+    );
+
+    const customerId = '29105573083';
+    const debitCardId = 'TQJQ95214468J85O';
+    const creditCardId = 'QLDW22575585E90E';
+    const expectedCreditCardBalance = -23805.0;
+
+    test('getToken() retrieves token',
+        () => openBankingClient.getToken(customerId).then((jwt) => expect(jwt != null, true)));
+
+    test(
+        'getCards() retrieves cards',
+        () =>
+            openBankingClient.getCards().then((cards) => expect(cards[0]['cardId'], debitCardId)));
+
+    test(
+      'getCard() retrieves specified card',
       () => openBankingClient
-          .getToken(customerId: env['CUSTOMER_ID'])
-          .then((jwt) => expect(jwt != null, true)));
+          .getCard(debitCardId)
+          .then((card) => expect(card['cardId'], debitCardId)),
+    );
 
-  test(
-      'getCards() retrieves cards',
+    test(
+      'getCardBalance() retrieves the balance of specified credit card',
       () => openBankingClient
-          .getCards()
-          .then((cards) => expect(cards[0]['cardId'], env['DEBIT_CARD_ID'])));
+          .getCardBalance(creditCardId)
+          .then((balance) => expect(balance['balance'], expectedCreditCardBalance)),
+    );
 
-  test(
-    'getCard() retrieves specified card',
-    () => openBankingClient
-        .getCard(id: env['DEBIT_CARD_ID'])
-        .then((card) => expect(card['cardId'], env['DEBIT_CARD_ID'])),
-  );
+    test(
+      'getCurrencyList() retrieves currencies',
+      () => openBankingClient
+          .getCurrencyRateList('NOK')
+          .then((currencies) => expect(currencies[0]['quoteCurrency'], 'NOK')),
+    );
 
-  test(
-    'getCardBalance() retrieves the balance of specified credit card',
-    () => openBankingClient.getCardBalance(id: env['CREDIT_CARD_ID']).then(
-        (balance) => expect(balance['balance'],
-            double.parse(env['EXPECTED_CREDIT_CARD_BALANCE']))),
-  );
+    test(
+      'getCurrencyRate() retrieves specified currency rate',
+      () => openBankingClient
+          .getCurrencyRate(quoteCurrency: 'NOK', baseCurrency: 'USD')
+          .then((rate) => expect(rate['baseCurrency'], 'USD')),
+    );
 
-  test(
-    'getCurrencyList() retrieves currencies',
-    () => openBankingClient
-        .getCurrencyRateList(quoteCurrency: 'NOK')
-        .then((currencies) => expect(currencies[0]['quoteCurrency'], 'NOK')),
-  );
+    test(
+      'getCurrentCustomer() retrieves the current customer',
+      () => openBankingClient
+          .getCurrentCustomer()
+          .then((customer) => expect(customer['customerId'], customerId)),
+    );
 
-  test(
-    'getCurrencyRate() retrieves specified currency rate',
-    () => openBankingClient
-        .getCurrencyRate(quoteCurrency: 'NOK', baseCurrency: 'USD')
-        .then((rate) => expect(rate['baseCurrency'], 'USD')),
-  );
-
-  test(
-    'getCurrentCustomer() retrieves the current customer',
-    () => openBankingClient
-        .getCurrentCustomer()
-        .then((customer) => expect(customer['customerId'], env['CUSTOMER_ID'])),
-  );
-
-  test(
-    'getTestCustomers() retrieves test customers',
-    () => openBankingClient
-        .getTestCustomers()
-        .then((customers) => expect(customers[0]['ssn'], env['CUSTOMER_ID'])),
-  );
+    test(
+      'getTestCustomers() retrieves test customers',
+      () => openBankingClient
+          .getTestCustomers()
+          .then((customers) => expect(customers[0]['ssn'], customerId)),
+    );
+  });
 }
