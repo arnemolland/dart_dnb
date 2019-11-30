@@ -8,23 +8,23 @@
 <h4 align="center">A Dart client for DNB's API products. (Under development, may change)</h4>
 <p align="center">
   <a href="https://travis-ci.org/arnemolland/dart-dnb">
-    <img alt="Travis Build Status" src="https://img.shields.io/travis/arnemolland/dart-dnb.svg?style=flat-square">
+    <img alt="Dart CI" src="https://github.com/arnemolland/dart-dnb/workflows/Dart%20CI/badge.svg">
   </a>
 
   <a href="https://pub.dartlang.org/packages/dnb">
-  	<img alt="npm (latest)" src="https://img.shields.io/pub/v/dnb.svg?style=flat-square">
+  	<img alt="npm (latest)" src="https://img.shields.io/pub/v/dnb.svg">
   </a>
 
   <a href="https://github.com/arnemolland/dart-dnb">
-    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/arnemolland/dart-dnb.svg?style=flat-square">
+    <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/arnemolland/dart-dnb.svg">
   </a>
 
   <a href="https://github.com/arnemolland/dart-dnb">
-    <img alt="License" src="https://img.shields.io/github/license/arnemolland/dart-dnb.svg?style=flat-square">
+    <img alt="License" src="https://img.shields.io/github/license/arnemolland/dart-dnb.svg">
   </a>
   
   <a href="https://github.com/carloscuesta/gitmoji">
-  <img alt="Gitmoji" src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square">
+  <img alt="Gitmoji" src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg">
   </a>
 </p>
 
