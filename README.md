@@ -7,8 +7,8 @@
 
 <h4 align="center">A Dart client for DNB's API products. (Under development, may change)</h4>
 <p align="center">
-  <a href="https://travis-ci.org/arnemolland/dart-dnb">
-    <img alt="Dart CI" src="https://github.com/arnemolland/dart-dnb/workflows/Dart%20CI/badge.svg">
+  <a href="https://github.com/arnemolland/dart-dnb/workflows/Dart%20CI">
+    <img alt="GitHub Actions Badge" src="https://github.com/arnemolland/dart-dnb/workflows/Dart%20CI/badge.svg">
   </a>
 
   <a href="https://pub.dartlang.org/packages/dnb">
