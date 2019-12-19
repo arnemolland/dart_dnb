@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- Bumped sigv4 version
+- Fixed build status badge
+- Removed deprecated `author:` field from pubspec
+
 ## 1.2.0+1
 
 - Formatting, updated readme
