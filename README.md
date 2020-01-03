@@ -35,10 +35,10 @@ See examples below.
 ## Usage
 
 ```dart
-import 'package:dnb/dnb.dart' as dnb;
+import 'package:dnb/dnb.dart';
 
 void main() async {
-  final client = dnb.OpenBankingClient(
+  final client = OpenBankingClient(
       clientKey: 'YOUR-CLIENT-KEY',
       clientSecret: 'YOUR-CLIENT-SECRET',
       apiKey: 'YOUR-API-KEY',
