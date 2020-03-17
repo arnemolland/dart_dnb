@@ -38,11 +38,7 @@ See examples below.
 import 'package:dnb/dnb.dart';
 
 void main() async {
-  final client = OpenBankingClient(
-      clientKey: 'YOUR-CLIENT-KEY',
-      clientSecret: 'YOUR-CLIENT-SECRET',
-      apiKey: 'YOUR-API-KEY',
-  );
+  final client = OpenBankingClient('YOUR-API-KEY');
 
   /// Retrieve all test customers from sandbox
   final testCustomers = await client.getTestCustomers();
@@ -67,4 +63,4 @@ PRs are appreciated.
 
 ## License
 
-MIT © 2019 Arne Molland
+MIT &copy; 2019 Arne Molland

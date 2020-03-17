@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0+1
+
+- Updated readme
+
 ## 1.3.0
 
 - Added basic models for response objects
