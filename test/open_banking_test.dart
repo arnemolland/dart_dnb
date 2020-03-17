@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:dnb/dnb.dart';
+import 'package:dotenv/dotenv.dart';
 import 'package:test/test.dart';
 
 void main() {
+  load();
+
   group('#realData', () {
     final openBankingClient = OpenBankingClient(
-      apiKey: Platform.environment['API_KEY'],
-      clientId: Platform.environment['CLIENT_ID'],
-      clientSecret: Platform.environment['CLIENT_SECRET'],
+      env['API_KEY'],
     );
 
     const customerId = '29105573083';
@@ -66,7 +65,7 @@ void main() {
       'getTestCustomers() retrieves test customers',
       () => openBankingClient
           .getTestCustomers()
-          .then((customers) => expect(customers[0]['ssn'], customerId)),
+          .then((customers) => expect(customers.first['ssn'], customerId)),
     );
   });
 }
