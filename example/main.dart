@@ -1,21 +1,18 @@
 import 'package:dnb/dnb.dart' as dnb;
 
 void main() async {
-  final openBankingClient = dnb.OpenBankingClient(
-    clientId: 'YOUR-CLIENT-KEY',
-    clientSecret: 'YOUR-CLIENT-SECRET',
-    apiKey: 'YOUR-API-KEY',
-  );
+  final openBankingClient = dnb.OpenBankingClient('YOUR-API-KEY');
 
   /// Retrieve all test customers from sandbox
   final testCustomers = await openBankingClient.getTestCustomers();
-  print(testCustomers);
 
   /// Retrieve token for access to other APIs
-  final token = await openBankingClient.getToken(testCustomers.first);
-  print(token);
+  await openBankingClient
+      .getToken(testCustomers.first['ssn'])
+      .then((token) => print(token));
 
   /// Retrieve the current customer using the token
-  final customer = await openBankingClient.getCurrentCustomer();
-  print(customer);
+  await openBankingClient
+      .getCurrentCustomer()
+      .then((customer) => print(customer));
 }

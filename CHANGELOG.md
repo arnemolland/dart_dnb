@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+- Added basic models for response objects
+
+### **BREAKING CHANGES:**
+
+- Removed sigv4/AWS dependency
+
 ## 1.2.1
 
 - Bumped sigv4 version
