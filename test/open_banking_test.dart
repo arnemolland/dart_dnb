@@ -11,34 +11,12 @@ void main() {
     );
 
     const customerId = '29105573083';
-    const debitCardId = 'TQJQ95214468J85O';
-    const creditCardId = 'QLDW22575585E90E';
-    const expectedCreditCardBalance = -23805.0;
 
     test(
         'getToken() retrieves token',
         () => openBankingClient
             .getToken(customerId)
             .then((jwt) => expect(jwt != null, true)));
-
-    test(
-        'getCards() retrieves cards',
-        () => openBankingClient
-            .getCards()
-            .then((cards) => expect(cards[0]['cardId'], debitCardId)));
-
-    test(
-      'getCard() retrieves specified card',
-      () => openBankingClient
-          .getCard(debitCardId)
-          .then((card) => expect(card['cardId'], debitCardId)),
-    );
-
-    test(
-      'getCardBalance() retrieves the balance of specified credit card',
-      () => openBankingClient.getCardBalance(creditCardId).then(
-          (balance) => expect(balance['balance'], expectedCreditCardBalance)),
-    );
 
     test(
       'getCurrencyList() retrieves currencies',

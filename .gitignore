@@ -9,6 +9,8 @@ ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
 .env*
+.certificates/
+.local-chromium/
 
 .vscode
 lib/main.dart

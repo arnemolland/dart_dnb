@@ -1,12 +1,13 @@
-library dnb;
+library dnb.open_banking;
 
 import 'dart:io';
 
-import 'package:dnb/src/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
+
+import 'models/models.dart';
 
 class OpenBankingClient {
   final String apiKey;
@@ -46,142 +47,6 @@ class OpenBankingClient {
       } else {
         throw HttpException(
             'HTTP${response.statusCode}: ${response.reasonPhrase}, ${response.body}');
-      }
-    });
-  }
-
-  /// Returns a list of all the credit and debit cards registered in DNB
-  /// for the current customer.
-  Future<dynamic> getCards({
-    int version = 0,
-  }) async {
-    return await get(
-      '$endpoint/cards/v$version',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json'
-      },
-    ).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        try {
-          return json.decode(utf8.decode(response.bodyBytes));
-        } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
-        }
-      } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
-      }
-    });
-  }
-
-  /// Takes a card's [id] and returns the card details.
-  Future<dynamic> getCard(
-    String id, {
-    int version = 0,
-  }) async {
-    return await get('$endpoint/cards/v$version/$id', headers: {
-      'x-api-key': apiKey,
-      'x-dnbapi-jwt': jwt,
-      'accept': 'application/json'
-    }).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        try {
-          return json.decode(utf8.decode(response.bodyBytes));
-        } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
-        }
-      } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
-      }
-    });
-  }
-
-  /// Takes a credit card's [id] and returns the balance of given credit card.
-  /// For debit cards, use `getAccountBalance`.
-  Future<dynamic> getCardBalance(
-    String id, {
-    int version = 0,
-  }) {
-    return get(
-      '$endpoint/cards/v$version/$id/balance',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json'
-      },
-    ).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        try {
-          return json.decode(utf8.decode(response.bodyBytes));
-        } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
-        }
-      } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
-      }
-    });
-  }
-
-  /// Takes a card's [id] and applies a soft-block (not including Cresco Cards).
-  /// This operation is only allowed where `cardStatus` is `Active` and
-  /// `blockAllowed` is `true`.
-  Future<dynamic> blockCard(
-    String id, {
-    int version = 0,
-  }) async {
-    return await put(
-      '$endpoint/cards/v$version/$id/block',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json',
-      },
-    ).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        try {
-          return json.decode(utf8.decode(response.bodyBytes));
-        } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
-        }
-      } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
-      }
-    });
-  }
-
-  /// Unblocks the debit card provided by [id] from a "soft block",
-  /// where `cardStatus` is `Blocked` and `unblockAllowed` is `true`.
-  Future<dynamic> unblockCard(
-    String id, {
-    int version = 0,
-  }) async {
-    return await put(
-      '$endpoint/cards/v$version/$id/unblock',
-      headers: {
-        'x-api-key': apiKey,
-        'x-dnbapi-jwt': jwt,
-        'accept': 'application/json',
-      },
-    ).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
-        try {
-          return json.decode(utf8.decode(response.bodyBytes));
-        } catch (e) {
-          throw FormatException(
-              'Failed to parse response body.\n${e.toString()}');
-        }
-      } else {
-        throw HttpException(
-            'HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
     });
   }
