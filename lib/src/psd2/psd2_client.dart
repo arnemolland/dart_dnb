@@ -30,16 +30,11 @@ class PSD2Client {
   HttpClient client;
 
   void _setupClient() {
-    try {
-      final context = SecurityContext.defaultContext
-        ..useCertificateChainBytes(certificate)
-        ..usePrivateKeyBytes(privateKey);
+    final context = SecurityContext.defaultContext
+      ..useCertificateChainBytes(certificate)
+      ..usePrivateKeyBytes(privateKey);
 
-      client = HttpClient(context: context);
-    } on IOException catch (e) {
-      print('$SecurityContext invalid certificate or private key');
-      rethrow;
-    }
+    client = HttpClient(context: context);
   }
 
   dynamic parseResponse(Response response) {
@@ -61,7 +56,7 @@ class PSD2Client {
   }
 
   Map<String, String> convertHeaders(PSD2Headers headers, [String consentId]) {
-    final map = headers?.toJson() ?? Map();
+    final map = headers?.toJson() ?? {};
     if (!map.containsKey('TPP-Redirect-URI')) {
       map['TPP-Redirect-URI'] = redirectUri;
     }
