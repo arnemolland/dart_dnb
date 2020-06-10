@@ -42,7 +42,6 @@ class PSD2Client {
       try {
         // Return void, as 204 is `No Content`
         if (response.statusCode == 204) return;
-        print(response.body);
         return json.decode(utf8.decode(response.bodyBytes));
       } catch (e) {
         throw FormatException(

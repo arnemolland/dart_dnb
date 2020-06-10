@@ -1,8 +1,8 @@
 import 'dart:convert';
-
-import 'models/accounts/card_account_details.dart';
 import 'package:http/http.dart';
 
+import 'models/accounts/card_account_details.dart';
+import 'models/accounts/transaction_list_request.dart';
 import 'models/accounts/account_list.dart';
 import 'models/accounts/account.dart';
 import 'models/accounts/card_account_list.dart';
@@ -67,7 +67,11 @@ class AccountInformationService {
   }) async {
     return delete(
       '$endpoint/v$version/consents/${headers.consentId ?? _consentId}',
-    ).then((res) => client.parseResponse(res));
+      headers: client.convertHeaders(headers),
+    ).then((res) {
+      client.parseResponse(res);
+      _consentId = null;
+    });
   }
 
   Future<AccountList> getAccountList(
@@ -103,23 +107,28 @@ class AccountInformationService {
   }
 
   Future<TransactionList> getTransactionList(
-    String accountNumber,
+    TransactionListRequest request,
     PSD2Headers headers, {
     int version = 1,
   }) async {
+    final uri = Uri.https(
+      endpoint.replaceFirst('https://', ''),
+      '/v$version/accounts/$request.accountNumber/transactions',
+      request.toQueryParams(),
+    );
     return get(
-      '$endpoint/v$version/accounts/$accountNumber/transactions',
-      headers: client.convertHeaders(headers),
+      uri,
+      headers: client.convertHeaders(headers, _consentId),
     ).then((res) => TransactionList.fromJson(client.parseResponse(res)));
   }
 
-  Future<CardAccountList> getCardAccounts(
+  Future<CardAccountList> getCardAccountList(
     PSD2Headers headers, {
     int version = 1,
   }) async {
     return get(
       '$endpoint/v$version/card-accounts',
-      headers: client.convertHeaders(headers),
+      headers: client.convertHeaders(headers, _consentId),
     ).then((res) => CardAccountList.fromJson(client.parseResponse(res)));
   }
 
@@ -130,7 +139,7 @@ class AccountInformationService {
   }) async {
     return get(
       '$endpoint/v$version/card-accounts/$accountNumber',
-      headers: client.convertHeaders(headers),
+      headers: client.convertHeaders(headers, _consentId),
     ).then((res) => CardAccountDetails.fromJson(client.parseResponse(res)));
   }
 
@@ -139,19 +148,28 @@ class AccountInformationService {
       {int version = 1}) async {
     return get(
       '$endpoint/v$version/card-accounts/$accountNumber/balances',
-      headers: client.convertHeaders(headers),
+      headers: client.convertHeaders(headers, _consentId),
     ).then((res) => BalanceResponse.fromJson(client.parseResponse(res)));
   }
 
-  Future<CardTransactionListResponse> getCardAccountTransactionList(
-    String accountNumber,
+  Future<CardTransactionListResponse> getCardTransactionList(
+    TransactionListRequest request,
     PSD2Headers headers, {
     int version = 1,
   }) async {
+    final uri = Uri.https(
+        endpoint.replaceFirst('https://', ''),
+        '/v$version/card-accounts/$request.accountNumber/transactions',
+        request.toQueryParams());
+
     return get(
-      '$endpoint/v$version/card-accounts/$accountNumber/transactions',
-      headers: client.convertHeaders(headers),
+      uri,
+      headers: client.convertHeaders(headers, _consentId),
     ).then((res) =>
         CardTransactionListResponse.fromJson(client.parseResponse(res)));
+  }
+
+  Future<dynamic> getArbitraryData(String path, PSD2Headers headers) async {
+    return get('$endpoint$path', headers: client.convertHeaders(headers));
   }
 }
