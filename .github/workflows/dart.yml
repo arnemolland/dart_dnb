@@ -20,7 +20,5 @@ jobs:
           PSD2_CERTIFICATE: ${{ secrets.PSD2_CERTIFICATE }}
       - name: Run tests
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           API_KEY: ${{ secrets.API_KEY }}
         run: pub run test
